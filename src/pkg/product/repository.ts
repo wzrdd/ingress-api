@@ -1,23 +1,23 @@
 import { DataSource, Repository } from "typeorm";
 
-import { Contacts as ContactEntity } from "./entity"
+import { Products as ProductEntity } from "./entity"
 
 import ErrorHTTP from '../../../lib/error'
 
 export default class Contact implements Interface.ContactDatabase {
-  repository: Repository<ContactEntity>;
+  repository: Repository<ProductEntity>;
 
   constructor(conn: DataSource) {
-    this.repository = conn.getRepository(ContactEntity);
+    this.repository = conn.getRepository(ProductEntity);
   }
 
-  get = async (request: Entities.Contact) => {
+  get = async (request: Entities.Product) => {
     try {
       const { id } = request;
       const response = await this.repository.findOneBy({ id });
 
       if (!response)
-        throw new ErrorHTTP({ message: `Contact Not Found with id: ${id}`, code: 404 })
+        throw new ErrorHTTP({ message: `Product not Found with id: ${id}`, code: 404 })
 
       return response;
     } catch (err) {
@@ -25,7 +25,6 @@ export default class Contact implements Interface.ContactDatabase {
     }
   };
 
-  // TODO add filter
   list = async () => {
     try {
       const response = await this.repository.find();
@@ -36,13 +35,13 @@ export default class Contact implements Interface.ContactDatabase {
     }
   };
 
-  create = async (request: Entities.Contact) => {
+  create = async (request: Entities.Product) => {
     const response = await this.repository.save(request);
 
     return response;
   }
 
-  update = async (request: Entities.Contact) => {
+  update = async (request: Entities.Product) => {
     try {
       const response = await this.repository.update(request.id, request);
 
@@ -52,7 +51,7 @@ export default class Contact implements Interface.ContactDatabase {
       const user = await this.get(request);
       return user;
     } catch (err) {
-      throw new Error("Can't update contact.")
+      throw new Error("Can't update Product.")
     }
   }
 

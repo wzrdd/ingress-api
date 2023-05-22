@@ -15,7 +15,7 @@ declare namespace Interface {
     list: () => Promise<Entities.Contact[]>
     create: (request: Entities.Contact) => Promise<Entities.Contact>
     update: (request: Entities.Contact) => Promise<Entities.Contact>
-    delete: (userId: string) => Promise<boolean>
+    delete: (id: string) => Promise<boolean>
   }
 
   export interface ContactDatabase {
@@ -23,6 +23,6 @@ declare namespace Interface {
     list: () => Promise<Entities.Contact[]>
     create: (request: Entities.Contact) => Promise<Entities.Contact>
     update: (request: Entities.Contact) => Promise<Entities.Contact>
-    delete: (userId: string) => Promise<boolean>
+    delete: (id: string) => Promise<boolean>
   }
 }

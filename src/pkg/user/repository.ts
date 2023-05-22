@@ -76,12 +76,12 @@ export default class User implements Interface.UserDatabase {
     }
   }
 
-  delete = async (userId: string) => {
+  delete = async (id: string) => {
     try {
       await this.repository
         .createQueryBuilder()
         .delete()
-        .where({ id: userId })
+        .where({ id })
         .execute();
 
       return true;
