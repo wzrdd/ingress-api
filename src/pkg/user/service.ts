@@ -15,6 +15,7 @@ export default class User implements Interface.UserService {
     return response;
   };
 
+  // TODO this should be called list
   listUsers = async () => {
     try {
       return await this.database.user.listUsers();
@@ -44,6 +45,7 @@ export default class User implements Interface.UserService {
     }
   };
 
+  // TODO userId should be id
   delete = async (userId: string) => {
     try {
       const response = await this.database.user.delete(userId);

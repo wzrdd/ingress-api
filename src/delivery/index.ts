@@ -3,6 +3,7 @@ import fastifyCors from '@fastify/cors'
 
 import User from '../pkg/user/delivery'
 import Auth from '../pkg/auth/delivery'
+import Contact from '../pkg/contact/delivery'
 
 export default class Server {
   server: FastifyInstance;
@@ -34,10 +35,13 @@ export default class Server {
 
     this.server.register(new User(this.services).routes, {
       prefix: "/api/v1/user",
-    });
+    })
     this.server.register(new Auth(this.services).routes, {
       prefix: "/api/v1/auth"
-    });
+    })
+    this.server.register(new Contact(this.services).routes, {
+      prefix: "/api/v1/contact"
+    })
   }
 
   start = async (port: number) => {

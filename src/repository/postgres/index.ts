@@ -3,14 +3,17 @@ import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
 import { Users } from "../../pkg/user/entity"
 import { Auths } from "../../pkg/auth/entity"
+import { Contacts } from "../../pkg/contact/entity"
 
 import User from "../../pkg/user/repository"
 import Auth from "../../pkg/auth/repository"
+import Contact from "../../pkg/contact/repository";
 
 export default class Postgres implements Interface.Postgres {
-  user: Interface.UserDatabase;
-  auth: Interface.AuthDatabase;
-  conn: DataSource;
+  user: Interface.UserDatabase
+  auth: Interface.AuthDatabase
+  contact: Interface.ContactDatabase
+  conn: DataSource
 
   constructor(
     private host: string,
@@ -32,6 +35,7 @@ export default class Postgres implements Interface.Postgres {
         entities: [
           Users,
           Auths,
+          Contacts
         ],
         logging: false,
         synchronize: true,
@@ -46,6 +50,7 @@ export default class Postgres implements Interface.Postgres {
 
       this.user = new User(conn)
       this.auth = new Auth(conn)
+      this.contact = new Contact(conn)
 
     } catch (err) {
       throw err
