@@ -74,6 +74,7 @@ export default class Product {
         name: string,
         quantityUnit: string,
         quantityValue: number,
+        quantityValueAlert: number,
         description: string
       },
       Params: {
@@ -86,10 +87,11 @@ export default class Product {
         try {
           const product: Entities.Product = { id: request.params.id }
 
-          const { name, quantityUnit, quantityValue, description } = request.body;
+          const { name, quantityUnit, quantityValue, quantityValueAlert, description } = request.body;
           if (name) product.name = name
-          if (quantityUnit) product.quantityUnit
-          if (quantityValue) product.quantityValue
+          if (quantityUnit) product.quantityUnit = quantityUnit
+          if (quantityValue) product.quantityValue = quantityValue
+          if (quantityValueAlert) product.quantityValueAlert = quantityValueAlert
           if (description) product.description = description
 
           const response = await this.services.product.update(product);

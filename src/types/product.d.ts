@@ -4,6 +4,7 @@ declare namespace Entities {
     name?: string
     quantityUnit?: string
     quantityValue?: number
+    quantityValueAlert?: number
     // TODO This is expected to be a JSON/BSON. This would be JSON if postgres is used
     // and BSON if Mongo is implemented. The mongo implementation is waiting if really needed.
     //
