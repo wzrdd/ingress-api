@@ -50,6 +50,8 @@ export default class User implements Interface.UserDatabase {
     try {
       const response = await this.repository.find();
 
+      response.forEach((x) => delete x.password);
+
       return response;
     } catch (err) {
       throw err;

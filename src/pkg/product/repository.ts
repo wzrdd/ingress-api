@@ -59,7 +59,7 @@ export default class Contact implements Interface.ContactDatabase {
     try {
       await this.repository
         .createQueryBuilder()
-        .softDelete()
+        .delete()
         .where({ id })
         .execute();
 

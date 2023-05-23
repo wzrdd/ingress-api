@@ -75,7 +75,7 @@ export default class User {
         try {
           const response = await this.services.user.delete(request.params.id)
 
-          return response;
+          return { deleted: response }
         } catch (err) {
           throw err;
         }

@@ -63,7 +63,7 @@ export default class Product {
         try {
           const response = await this.services.product.delete(request.params.id)
 
-          return response;
+          return { deleted: response }
         } catch (err) {
           throw err;
         }

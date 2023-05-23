@@ -62,7 +62,7 @@ export default class Contact {
         try {
           const response = await this.services.contact.delete(request.params.id)
 
-          return response;
+          return { deleted: response };
         } catch (err) {
           throw err;
         }
