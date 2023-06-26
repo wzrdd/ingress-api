@@ -4,12 +4,12 @@ export default class Auth {
   constructor(private readonly services: Interface.Services) {}
 
   routes = async (app: FastifyInstance, {}) => {
-    app.post<{ Body: { rut: string, password: string } }>(
+    app.post<{ Body: { email: string, password: string } }>(
       '/sign-in',
       async (request, reply) => {
         try {
-          const { rut, password } = request.body;
-          const response = await this.services.auth.signIn(rut, password);
+          const { email, password } = request.body;
+          const response = await this.services.auth.signIn(email, password);
 
           reply.send({ auth: response });
         } catch (err) {

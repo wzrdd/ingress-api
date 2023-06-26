@@ -19,14 +19,14 @@ export default class Server {
     this.server.decorate("auth",
       async (req: FastifyRequest, rep: FastifyReply) => {
         try {
-          const token = req.headers.authorization?.split(" ")[1];
+          const token = req.headers.authorization?.split(" ")[1]
 
-          const validation = this.services.auth.validateToken(token);
+          const validation = this.services.auth.validateToken(token)
 
-          return validation;
+          return validation
         } catch (err) {
           if (err.code) {
-            rep.code(err.code).send({ error: err.message });
+            rep.code(err.code).send({ error: err.message })
           } else {
             rep.code(500).send({ error: err })
           }
@@ -50,7 +50,7 @@ export default class Server {
 
   start = async (port: number) => {
     try {
-      this.server.listen({ port, host: "0.0.0.0" }, function (err, addr) {
+      this.server.listen({ port, host: "0.0.0.0" }, function (err, _addr) {
         if (err) {
           this.server.log.error(err)
           process.exit(1)

@@ -8,9 +8,9 @@ export default class Auth implements Interface.AuthService {
     this.saltRounds = 10;
   }
 
-  signIn = async (rut: string, password: string) => {
+  signIn = async (email: string, password: string) => {
     try {
-      const user = await this.database.user.getWithPassword({ rut });
+      const user = await this.database.user.getWithPassword({ email });
 
       if (!user)
         throw new Error("Can't find user.")
