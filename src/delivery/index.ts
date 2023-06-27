@@ -5,6 +5,7 @@ import User from '../pkg/user/delivery'
 import Auth from '../pkg/auth/delivery'
 import Contact from '../pkg/contact/delivery'
 import Product from '../pkg/product/delivery'
+import Role from '../pkg/roles/delivery'
 
 export default class Server {
   server: FastifyInstance;
@@ -23,12 +24,14 @@ export default class Server {
 
           const validation = this.services.auth.validateToken(token)
 
-          return validation
+          // TODO this is hardcoded, should be added when roles are added
+          return { ...validation, role: { name: "admin" } }
         } catch (err) {
+          console.log("hola", err)
           if (err.code) {
             rep.code(err.code).send({ error: err.message })
           } else {
-            rep.code(500).send({ error: err })
+            rep.code(403).send({ error: err })
           }
         }
       }
@@ -45,6 +48,9 @@ export default class Server {
     })
     this.server.register(new Product(this.services).routes, {
       prefix: "/api/v1/product"
+    })
+    this.server.register(new Role(this.services).routes, {
+      prefix: "/api/v1/role"
     })
   }
 

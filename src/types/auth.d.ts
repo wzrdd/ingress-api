@@ -13,7 +13,7 @@ declare namespace Entities {
 declare namespace Interface {
   export interface AuthService {
     signIn: (rut: string, password: string) => Promise<Entities.Auth>;
-    validateToken: (token: string) => Promise<{ message: string, code: number }>;
+    validateToken: (token: string) => Promise<{ message: string, code: number, user: Entities.User }>;
     deleteToken: (token: string) => Promise<boolean>;
     changePassword: (
       id: string,

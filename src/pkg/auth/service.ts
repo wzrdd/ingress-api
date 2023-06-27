@@ -44,6 +44,7 @@ export default class Auth implements Interface.AuthService {
         throw new Error("Token not valid.")
 
       const user = await this.database.user.get({ id: t.userId });
+      // TODO add roles too
 
       return { message: "OK", code: 200, user };
     } catch (err) {

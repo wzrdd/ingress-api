@@ -1,10 +1,28 @@
 import { FastifyInstance } from "fastify";
+import Authorization, { RBACI } from "../../../lib/rbac";
+
+const queryRoles = {
+  can: {
+    get: { where: { user: "true" } },
+    list: { where: { user: "true" } },
+    create: { where: { user: "true" } },
+    update: { where: { user: "true" } },
+  }
+}
 
 export default class User {
-  services: Interface.Services;
+  services: Interface.Services
+  session: any
+  authorization: any
+  rbac: RBACI
 
   constructor(services: Interface.Services) {
-    this.services = services;
+    this.services = services
+    this.rbac = {
+      admin: queryRoles,
+      operador: queryRoles,
+      user: { can: { get: { where: { user: "true" } } } }
+    }
   }
 
   // TODO This shouldn't exists. The deployment should include 1 super-admin (us)
@@ -55,7 +73,13 @@ export default class User {
         }
       });
 
-    app.get('/users', { preValidation: [app.auth] }, async () => {
+    app.get('/users', {
+      preValidation: async (req, res) => {
+        this.session = await app.auth(req, res)
+        this.authorization = new Authorization(this.session, this.rbac)
+        this.authorization.can("get")
+      }
+    }, async () => {
       try {
         const response = await this.services.user.listUsers();
 
