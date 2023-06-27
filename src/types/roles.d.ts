@@ -7,7 +7,8 @@ declare namespace Entities {
 
 declare namespace Interface {
   export interface Role {
-    list: () => Promise<Entities.Role[]>;
-    create: (request: Entities.Role) => Promise<Entities.Role>;
+    get: (request: Entities.Role) => Promise<Entities.Role>
+    list: () => Promise<Entities.Role[]>
+    create: (request: Entities.Role) => Promise<Entities.Role>
   }
 }

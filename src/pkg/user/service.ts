@@ -4,23 +4,23 @@ export default class User implements Interface.UserService {
   constructor(private readonly database: Interface.Postgres) {}
 
   get = async (request: Entities.User) => {
-    const response = await this.database.user.get(request);
+    const response = await this.database.user.get(request)
 
-    return response;
+    return response
   };
 
   getWithPassword = async (request: Entities.User) => {
-    const response = await this.database.user.getWithPassword(request);
+    const response = await this.database.user.getWithPassword(request)
 
-    return response;
+    return response
   };
 
   // TODO this should be called list
-  listUsers = async () => {
+  list = async () => {
     try {
-      return await this.database.user.listUsers();
+      return await this.database.user.list()
     } catch (err) {
-      throw err;
+      throw err
     }
   };
 
@@ -28,18 +28,29 @@ export default class User implements Interface.UserService {
     if (!request.password)
       throw new Error("Password missing.")
 
+    request.password = await hash(request.password, 10)
+
+    const response = await this.database.user.create(request)
+
+    return response
+  }
+
+  createAdmin = async (request: Entities.User) => {
+    if (!request.password)
+      throw new Error("Password missing.")
+
     request.password = await hash(request.password, 10);
 
-    const response = await this.database.user.create(request);
+    const response = await this.database.user.create({ ...request, role: "admin" })
 
-    return response;
+    return response
   };
 
   update = async (request: Entities.User) => {
     try {
-      const response = await this.database.user.update(request);
+      const response = await this.database.user.update(request)
 
-      return response;
+      return response
     } catch (err) {
       throw new Error("Can't update user.")
     }

@@ -46,7 +46,7 @@ export default class User implements Interface.UserDatabase {
     return (await this.getHelper(request));
   }
 
-  listUsers = async () => {
+  list = async () => {
     try {
       const response = await this.repository.find();
 

@@ -13,7 +13,7 @@ export default class Role {
         const response = await this.services.role.list();
 
         return {
-          role: response,
+          roles: response,
         };
       } catch (err) {
         throw new Error(err);

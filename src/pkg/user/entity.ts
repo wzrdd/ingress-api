@@ -22,4 +22,7 @@ export class Users implements Entities.User {
 
   @Column()
   password?: string
+
+  @Column()
+  role?: string
 }

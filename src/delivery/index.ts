@@ -22,12 +22,11 @@ export default class Server {
         try {
           const token = req.headers.authorization?.split(" ")[1]
 
-          const validation = this.services.auth.validateToken(token)
+          const validation = await this.services.auth.validateToken(token)
+          const role = await this.services.role.get({ name: validation.user.role })
 
-          // TODO this is hardcoded, should be added when roles are added
-          return { ...validation, role: { name: "admin" } }
+          return { ...validation, role }
         } catch (err) {
-          console.log("hola", err)
           if (err.code) {
             rep.code(err.code).send({ error: err.message })
           } else {

@@ -25,8 +25,6 @@ export default class User {
     }
   }
 
-  // TODO This shouldn't exists. The deployment should include 1 super-admin (us)
-  // and 1 admin for the client. This is blocked by the RBAC implementation.
   routes = async (app: FastifyInstance) => {
     app.post<{
       Body: {
@@ -35,10 +33,41 @@ export default class User {
         rut: string,
         email: string,
         phone: string,
-        password: string
+        password: string,
+        role: string
       }
     }>(
       '/create',
+      async (request) => {
+        const { name, lastName, rut, email, phone, password, role } = request.body;
+
+        const user: Entities.User = {
+          name,
+          lastName,
+          rut,
+          email,
+          phone,
+          password,
+          role
+        }
+        const response = await this.services.user.create(user);
+
+        delete response.password;
+        return { user: response };
+      }
+    )
+
+    app.post<{
+      Body: {
+        name: string,
+        lastName: string,
+        rut: string,
+        email: string,
+        phone: string,
+        password: string,
+      }
+    }>(
+      '/create-admin',
       async (request) => {
         const { name, lastName, rut, email, phone, password } = request.body;
 
@@ -50,13 +79,13 @@ export default class User {
           phone,
           password
         }
-        const response = await this.services.user.create(user);
+
+        const response = await this.services.user.createAdmin(user);
 
         delete response.password;
         return { user: response };
       }
     )
-
     app.get<{
       Params: { id: string }
     }>(
@@ -81,7 +110,7 @@ export default class User {
       }
     }, async () => {
       try {
-        const response = await this.services.user.listUsers();
+        const response = await this.services.user.list();
 
         return response;
       } catch (err) {

@@ -6,12 +6,22 @@ export default class Role implements Interface.Role {
   repository: Repository<RoleEntity>
 
   constructor(conn: DataSource) {
-    this.repository = conn.getRepository(RoleEntity);
+    this.repository = conn.getRepository(RoleEntity)
+  }
+
+  get = async (request: Entities.Role) => {
+    try {
+      const response = await this.repository.findOneBy(request)
+
+      return response
+    } catch (err) {
+      throw err
+    }
   }
 
   list = async () => {
     try {
-      const response = await this.repository.find({});
+      const response = await this.repository.find({})
 
       return response;
     } catch (err) {
@@ -20,8 +30,12 @@ export default class Role implements Interface.Role {
   };
 
   create = async (request: Entities.Role) => {
-    const response = await this.repository.save(request);
+    try {
+      const response = await this.repository.save(request)
 
-    return response;
+      return response;
+    } catch (err) {
+      throw err
+    }
   };
 }
