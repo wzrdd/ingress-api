@@ -1,6 +1,8 @@
 import { FastifyInstance } from "fastify";
 import Authorization, { RBACI } from "../../../lib/rbac";
 
+import ErrorHTTP from '../../../lib/error'
+
 const queryRoles = {
   can: {
     get: { where: { user: "true" } },
@@ -20,8 +22,20 @@ export default class User {
     this.services = services
     this.rbac = {
       admin: queryRoles,
-      operador: queryRoles,
-      user: { can: { get: { where: { user: "true" } } } }
+      logistico: {
+        can: {
+          get: { where: { user: "true" } },
+          update: { where: { user: "true" } },
+          delete: { where: { user: "true" } }
+        }
+      },
+      operador: {
+        can: {
+          get: { where: { user: "true" } },
+          update: { where: { user: "true" } },
+          delete: { where: { user: "true" } }
+        }
+      },
     }
   }
 
@@ -38,6 +52,13 @@ export default class User {
       }
     }>(
       '/create',
+      {
+        preValidation: async (req, res) => {
+          this.session = await app.auth(req, res)
+          this.authorization = new Authorization(this.session, this.rbac)
+          this.authorization.can("create")
+        }
+      },
       async (request) => {
         const { name, lastName, rut, email, phone, password, role } = request.body;
 
@@ -90,7 +111,21 @@ export default class User {
       Params: { id: string }
     }>(
       "/:id",
-      { preValidation: [app.auth] },
+      {
+        preValidation: async (req, res) => {
+          this.session = await app.auth(req, res)
+          this.authorization = new Authorization(this.session, this.rbac)
+
+          if (this.session.user.id != req.params.id) {
+            throw new ErrorHTTP({
+              message: "Solo puedes ver tus propios datos.",
+              code: 403
+            });
+          }
+
+          this.authorization.can("get")
+        }
+      },
       async (request) => {
         try {
           const user: Entities.User = { id: request.params.id }
@@ -98,7 +133,10 @@ export default class User {
 
           return { user: response };
         } catch (err) {
-          throw new Error(err);
+          throw new ErrorHTTP({
+            message: err.message,
+            code: err.code
+          });
         }
       });
 
@@ -106,7 +144,7 @@ export default class User {
       preValidation: async (req, res) => {
         this.session = await app.auth(req, res)
         this.authorization = new Authorization(this.session, this.rbac)
-        this.authorization.can("get")
+        this.authorization.can("list")
       }
     }, async () => {
       try {
@@ -123,7 +161,21 @@ export default class User {
       { id: string }
     }>(
       '/:id',
-      { preValidation: [app.auth] },
+      {
+        preValidation: async (req, res) => {
+          this.session = await app.auth(req, res)
+          this.authorization = new Authorization(this.session, this.rbac)
+
+          if (this.session.user.id != req.params.id) {
+            throw new ErrorHTTP({
+              message: "Solo puedes eliminarte a ti, no otro usuario.",
+              code: 403
+            });
+          }
+
+          this.authorization.can("delete")
+        }
+      },
       async (request) => {
         try {
           const response = await this.services.user.delete(request.params.id)
@@ -146,7 +198,21 @@ export default class User {
       }
     }>(
       '/:id',
-      { preValidation: [app.auth] },
+      {
+        preValidation: async (req, res) => {
+          this.session = await app.auth(req, res)
+          this.authorization = new Authorization(this.session, this.rbac)
+
+          if (this.session.user.id != req.params.id) {
+            throw new ErrorHTTP({
+              message: "Solo puedes actualizarte a ti, no otro usuario.",
+              code: 403
+            });
+          }
+
+          this.authorization.can("update")
+        }
+      },
       async (request) => {
         try {
           const user: Entities.User = { id: request.params.id }
