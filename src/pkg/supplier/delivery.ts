@@ -1,8 +1,6 @@
 import { FastifyInstance } from "fastify";
 import Authorization, { RBACI } from "../../../lib/rbac";
 
-import ErrorHTTP from '../../../lib/error'
-
 const queryRoles = {
   can: {
     get: { where: { user: "true" } },
@@ -12,14 +10,14 @@ const queryRoles = {
   }
 }
 
-export default class Arrival {
-  services: Interface.Services
+export default class Supplier {
+  services: Interface.Services;
   session: any
   authorization: any
   rbac: RBACI
 
   constructor(services: Interface.Services) {
-    this.services = services
+    this.services = services;
     this.rbac = {
       admin: queryRoles,
       logistico: queryRoles,
@@ -35,10 +33,9 @@ export default class Arrival {
   routes = async (app: FastifyInstance) => {
     app.post<{
       Body: {
-        entryDate: Date,
-        productId: string[],
-        supplierId: string,
-        aditionalNotes: string
+        name: string,
+        email: string,
+        phone: string,
       }
     }>(
       '/create',
@@ -50,26 +47,13 @@ export default class Arrival {
         }
       },
       async (request) => {
-        try {
-          const { entryDate, productId, supplierId, aditionalNotes } = request.body;
+        const { name, email, phone } = request.body;
 
-          const arrival: Entities.Arrival = {
-            entryDate,
-            productId,
-            supplierId,
-            aditionalNotes
-          }
-          const response = await this.services.arrival.create(arrival);
+        const supplier: Entities.Supplier = { name, email, phone }
+        const response = await this.services.supplier.create(supplier);
 
-          return { arrival: response };
-        } catch (err) {
-          throw new ErrorHTTP({
-            message: err.message,
-            code: err.code || 500
-          });
-        }
+        return { supplier: response };
       }
-
     )
 
     app.get<{
@@ -85,20 +69,16 @@ export default class Arrival {
       },
       async (request) => {
         try {
-          const arrival: Entities.Arrival = { id: request.params.id }
+          const supplier: Entities.Supplier = { id: request.params.id }
+          const response = await this.services.supplier.get(supplier);
 
-          const response = await this.services.arrival.get(arrival);
-
-          return { arrival: response };
+          return { supplier: response };
         } catch (err) {
-          throw new ErrorHTTP({
-            message: err.message,
-            code: err.code
-          });
+          throw new Error(err);
         }
       });
 
-    app.get('/arrivals',
+    app.get('/suppliers',
       {
         preValidation: async (req, res) => {
           this.session = await app.auth(req, res)
@@ -108,15 +88,11 @@ export default class Arrival {
       },
       async () => {
         try {
-          // TODO this should accept a filter
-          const response = await this.services.arrival.list();
+          const response = await this.services.supplier.list();
 
           return response;
         } catch (err) {
-          throw new ErrorHTTP({
-            message: err.message,
-            code: err.code || 500
-          });
+          throw err;
         }
       });
 
@@ -134,23 +110,19 @@ export default class Arrival {
       },
       async (request) => {
         try {
-          const response = await this.services.user.delete(request.params.id)
+          const response = await this.services.supplier.delete(request.params.id)
 
           return { deleted: response }
         } catch (err) {
-          throw new ErrorHTTP({
-            message: err.message,
-            code: err.code || "500"
-          });
+          throw err;
         }
       });
 
     app.post<{
       Body: {
-        entryDate: Date,
-        productId: string[],
-        supplierId: string,
-        aditionalNotes: string
+        name: string,
+        email: string,
+        phone: string,
       },
       Params: {
         id: string
@@ -166,22 +138,17 @@ export default class Arrival {
       },
       async (request) => {
         try {
-          const arrival: Entities.Arrival = { id: request.params.id }
+          const supplier: Entities.Supplier = { id: request.params.id }
 
-          const { entryDate, productId, supplierId, aditionalNotes } = request.body;
+          const { name, email, phone } = request.body;
+          if (name) supplier.name = name
+          if (email) supplier.email = email
+          if (phone) supplier.phone = phone
 
-          if (entryDate) arrival.entryDate = entryDate
-          if (productId) arrival.productId = productId
-          if (supplierId) arrival.supplierId = supplierId
-          if (aditionalNotes) arrival.aditionalNotes = aditionalNotes
-
-          const response = await this.services.arrival.update(arrival);
-          return { arrival: response };
+          const response = await this.services.supplier.update(supplier);
+          return { supplier: response };
         } catch (err) {
-          throw new ErrorHTTP({
-            message: err.message,
-            code: err.code || "500"
-          });
+          throw err;
         }
       }
     );

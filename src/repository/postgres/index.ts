@@ -5,15 +5,17 @@ import { Users } from "../../pkg/user/entity"
 import { Auths } from "../../pkg/auth/entity"
 import { Contacts } from "../../pkg/contact/entity"
 import { Products } from '../../pkg/product/entity'
-import { Roles } from '../../pkg/roles/entity'
+import { Roles } from '../../pkg/role/entity'
 import { Arrivals } from '../../pkg/arrival/entity'
+import { Suppliers } from '../../pkg/supplier/entity'
 
 import User from "../../pkg/user/repository"
 import Auth from "../../pkg/auth/repository"
 import Contact from "../../pkg/contact/repository"
 import Product from "../../pkg/product/repository"
-import Role from '../../pkg/roles/repository'
+import Role from '../../pkg/role/repository'
 import Arrival from '../../pkg/arrival/repository'
+import Supplier from '../../pkg/supplier/repository'
 
 export default class Postgres implements Interface.Postgres {
   user: Interface.UserDatabase
@@ -22,6 +24,7 @@ export default class Postgres implements Interface.Postgres {
   product: Interface.ProductDatabase
   role: Interface.Role
   arrival: Interface.ArrivalDatabase
+  supplier: Interface.SupplierDatabase
 
   conn: DataSource
 
@@ -48,7 +51,8 @@ export default class Postgres implements Interface.Postgres {
           Contacts,
           Products,
           Roles,
-          Arrivals
+          Arrivals,
+          Suppliers
         ],
         logging: false,
         synchronize: true,
@@ -67,6 +71,7 @@ export default class Postgres implements Interface.Postgres {
       this.product = new Product(conn)
       this.role = new Role(conn)
       this.arrival = new Arrival(conn)
+      this.supplier = new Supplier(conn)
     } catch (err) {
       throw err
     }
