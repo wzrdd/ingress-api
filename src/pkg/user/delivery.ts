@@ -117,7 +117,7 @@ export default class User {
           this.session = await app.auth(req, res)
           this.authorization = new Authorization(this.session, this.rbac)
 
-          if (this.session.user.id != req.params.id) {
+          if (this.session.user.id != req.params.id && this.session.role.name != "Admin") {
             throw new ErrorHTTP({
               message: "Solo puedes ver tus propios datos.",
               code: 403
@@ -174,7 +174,7 @@ export default class User {
           this.session = await app.auth(req, res)
           this.authorization = new Authorization(this.session, this.rbac)
 
-          if (this.session.user.id != req.params.id) {
+          if (this.session.user.id != req.params.id && this.session.role.name != "Admin") {
             throw new ErrorHTTP({
               message: "Solo puedes eliminarte a ti, no otro usuario.",
               code: 403
@@ -199,7 +199,8 @@ export default class User {
         name: string,
         lastName: string,
         email: string,
-        password: string
+        password: string,
+        role: string
       },
       Params: {
         id: string
@@ -211,7 +212,7 @@ export default class User {
           this.session = await app.auth(req, res)
           this.authorization = new Authorization(this.session, this.rbac)
 
-          if (this.session.user.id != req.params.id) {
+          if (this.session.user.id != req.params.id && this.session.role.name != "Admin") {
             throw new ErrorHTTP({
               message: "Solo puedes actualizarte a ti, no otro usuario.",
               code: 403
@@ -225,12 +226,13 @@ export default class User {
         try {
           const user: Entities.User = { id: request.params.id }
 
-          const { name, lastName, email, password } = request.body;
+          const { name, lastName, email, password, role } = request.body;
 
           if (name) user.name = name;
           if (lastName) user.lastName = lastName;
           if (email) user.email = email;
           if (password) user.password = password;
+          if (role) user.role = role
 
           const response = await this.services.user.update(user);
           return { user: response };
