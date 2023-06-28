@@ -19,9 +19,9 @@ export default class Supplier {
   constructor(services: Interface.Services) {
     this.services = services;
     this.rbac = {
-      admin: queryRoles,
-      logistico: queryRoles,
-      operador: {
+      Admin: queryRoles,
+      Logistico: queryRoles,
+      Operador: {
         can: {
           get: { where: { user: "true" } },
           list: { where: { user: "true" } },

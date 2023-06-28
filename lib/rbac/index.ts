@@ -29,12 +29,12 @@ export default class Authorization {
   user(operation: string) {
     if (!this.roles[this.session.role.name])
       throw new ErrorHTTP({
-        message: `The role: ${this.session.role.name}, haven't access`,
+        message: `El rol ${this.session.role.name}, no tiene permisos para este recurso`,
         code: 403
       });
     if (!this.roles[this.session.role.name].can[operation])
       throw new ErrorHTTP({
-        message: `can't: ${operation}`,
+        message: `No puede: ${operation}`,
         code: 403
       });
 
@@ -59,6 +59,7 @@ export default class Authorization {
  * verbs: get, list, create, update, delete
  * Roles:
  * Admin
+ * Cliente
  * Operador
  * Logistico
  */

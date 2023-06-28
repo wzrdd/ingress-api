@@ -17,9 +17,9 @@ export default class Contact {
     }>(
       '/create',
       async (request) => {
-        const { email, message, status } = request.body;
+        const { email, message } = request.body;
 
-        const contact: Entities.Contact = { email, message, status }
+        const contact: Entities.Contact = { email, message, status: "No visto" }
         const response = await this.services.contact.create(contact);
 
         return { contact: response };

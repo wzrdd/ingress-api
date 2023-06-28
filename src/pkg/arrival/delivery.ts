@@ -21,9 +21,10 @@ export default class Arrival {
   constructor(services: Interface.Services) {
     this.services = services
     this.rbac = {
-      admin: queryRoles,
-      logistico: queryRoles,
-      operador: {
+      Admin: queryRoles,
+      Cliente: queryRoles,
+      Logistico: queryRoles,
+      Operario: {
         can: {
           get: { where: { user: "true" } },
           list: { where: { user: "true" } },

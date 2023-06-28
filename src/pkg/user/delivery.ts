@@ -21,15 +21,16 @@ export default class User {
   constructor(services: Interface.Services) {
     this.services = services
     this.rbac = {
-      admin: queryRoles,
-      logistico: {
+      Admin: queryRoles,
+      Cliente: queryRoles,
+      Logistico: {
         can: {
           get: { where: { user: "true" } },
           update: { where: { user: "true" } },
           delete: { where: { user: "true" } }
         }
       },
-      operador: {
+      Operario: {
         can: {
           get: { where: { user: "true" } },
           update: { where: { user: "true" } },
