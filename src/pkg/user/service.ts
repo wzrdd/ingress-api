@@ -40,7 +40,7 @@ export default class User implements Interface.UserService {
 
     request.password = await hash(request.password, 10);
 
-    const response = await this.database.user.create({ ...request, role: "admin" })
+    const response = await this.database.user.create({ ...request, role: "Admin" })
 
     return response
   };
