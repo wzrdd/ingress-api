@@ -99,7 +99,11 @@ export default class Arrival {
         }
       });
 
-    app.get('/arrivals',
+    app.post<{
+      Body: {
+        days?: number,
+      }
+    }>('/arrivals',
       {
         preValidation: async (req, res) => {
           this.session = await app.auth(req, res)
@@ -107,16 +111,17 @@ export default class Arrival {
           this.authorization.can("list")
         }
       },
-      async () => {
+      async (request) => {
         try {
-          // TODO this should accept a filter
-          const response = await this.services.arrival.list();
+          const days = request.body?.days || 999999
+
+          const response = await this.services.arrival.list(days);
 
           return response;
         } catch (err) {
           throw new ErrorHTTP({
             message: err.message,
-            code: err.code || 500
+            code: err.code || 500,
           });
         }
       });

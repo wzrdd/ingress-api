@@ -1,4 +1,5 @@
 import { DataSource, Repository } from "typeorm";
+import { Raw } from "typeorm"
 
 import { Arrivals as ArrivalEntity } from "./entity"
 
@@ -25,9 +26,13 @@ export default class Arrival implements Interface.ArrivalDatabase {
     }
   };
 
-  list = async () => {
+  list = async (days: number) => {
     try {
-      const response = await this.repository.find();
+      const response = await this.repository.find({
+        where: {
+          entryDate: Raw((alias) => `${alias} >= NOW() AND ${alias} <= NOW() + INTERVAL '${days}' DAY`)
+        }
+      })
 
       return response;
     } catch (err) {

@@ -11,7 +11,7 @@ declare namespace Entities {
 declare namespace Interface {
   export interface ArrivalService {
     get: (request: Entities.Arrival) => Promise<Entities.Arrival>
-    list: () => Promise<Entities.Arrival[]>
+    list: (days: number) => Promise<Entities.Arrival[]>
     create: (request: Entities.Arrival) => Promise<Entities.Arrival>
     update: (request: Entities.Arrival) => Promise<Entities.Arrival>
     delete: (userId: string) => Promise<boolean>
@@ -19,7 +19,7 @@ declare namespace Interface {
 
   export interface ArrivalDatabase {
     get: (request: Entities.Arrival) => Promise<Entities.Arrival>
-    list: () => Promise<Entities.Arrival[]>
+    list: (days: number) => Promise<Entities.Arrival[]>
     create: (request: Entities.Arrival) => Promise<Entities.Arrival>
     update: (request: Entities.Arrival) => Promise<Entities.Arrival>
     delete: (userId: string) => Promise<boolean>
