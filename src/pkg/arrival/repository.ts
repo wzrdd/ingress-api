@@ -31,6 +31,9 @@ export default class Arrival implements Interface.ArrivalDatabase {
       const response = await this.repository.find({
         where: {
           entryDate: Raw((alias) => `${alias} >= NOW() AND ${alias} <= NOW() + INTERVAL '${days}' DAY`)
+        },
+        order: {
+          entryDate: "ASC"
         }
       })
 
