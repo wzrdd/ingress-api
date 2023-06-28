@@ -12,15 +12,16 @@ export default class Product {
       Body: {
         name: string,
         quantityUnit: string,
+        productType: string,
         quantityValue: number,
         description: string
       }
     }>(
       '/create',
       async (request) => {
-        const { name, quantityUnit, quantityValue, description } = request.body;
+        const { name, quantityUnit, quantityValue, productType, description } = request.body;
 
-        const product: Entities.Product = { name, quantityUnit, quantityValue, description }
+        const product: Entities.Product = { name, quantityUnit, quantityValue, productType, description }
         const response = await this.services.product.create(product);
 
         return { product: response };
@@ -74,6 +75,7 @@ export default class Product {
         name: string,
         quantityUnit: string,
         quantityValue: number,
+        productType: string,
         quantityValueAlert: number,
         description: string
       },
@@ -87,8 +89,9 @@ export default class Product {
         try {
           const product: Entities.Product = { id: request.params.id }
 
-          const { name, quantityUnit, quantityValue, quantityValueAlert, description } = request.body;
+          const { name, quantityUnit, quantityValue, productType, quantityValueAlert, description } = request.body;
           if (name) product.name = name
+          if (productType) product.productType = productType
           if (quantityUnit) product.quantityUnit = quantityUnit
           if (quantityValue) product.quantityValue = quantityValue
           if (quantityValueAlert) product.quantityValueAlert = quantityValueAlert

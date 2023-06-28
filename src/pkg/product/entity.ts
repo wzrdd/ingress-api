@@ -12,6 +12,9 @@ export class Products implements Entities.Product {
   quantityUnit?: string
 
   @Column()
+  productType?: string
+
+  @Column()
   quantityValue?: number
 
   @Column()
