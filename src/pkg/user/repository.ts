@@ -46,9 +46,17 @@ export default class User implements Interface.UserDatabase {
     return (await this.getHelper(request));
   }
 
-  list = async () => {
+  list = async (request: Entities.User) => {
     try {
-      const response = await this.repository.find();
+      let response: UserEntity[] = []
+      if (request.role)
+        response = await this.repository.find({
+          where: {
+            role: request.role
+          }
+        })
+      else
+        response = await this.repository.find();
 
       response.forEach((x) => delete x.password);
 

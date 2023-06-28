@@ -141,21 +141,28 @@ export default class User {
         }
       });
 
-    app.get('/users', {
-      preValidation: async (req, res) => {
-        this.session = await app.auth(req, res)
-        this.authorization = new Authorization(this.session, this.rbac)
-        this.authorization.can("list")
-      }
-    }, async () => {
-      try {
-        const response = await this.services.user.list();
+    app.get<
+      {
+        Querystring: {
+          rol?: string
+        }
+      }>('/users', {
+        preValidation: async (req, res) => {
+          this.session = await app.auth(req, res)
+          this.authorization = new Authorization(this.session, this.rbac)
+          this.authorization.can("list")
+        }
+      },
+        async (request) => {
+          try {
+            const role = request.query.rol
+            const response = await this.services.user.list({ role });
 
-        return response;
-      } catch (err) {
-        throw err;
-      }
-    });
+            return response;
+          } catch (err) {
+            throw err;
+          }
+        });
 
     app.delete<{
       Params:

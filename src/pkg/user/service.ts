@@ -15,9 +15,9 @@ export default class User implements Interface.UserService {
     return response
   };
 
-  list = async () => {
+  list = async (request: Entities.User) => {
     try {
-      return await this.database.user.list()
+      return await this.database.user.list(request)
     } catch (err) {
       throw err
     }

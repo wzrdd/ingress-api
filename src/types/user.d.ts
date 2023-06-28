@@ -15,7 +15,7 @@ declare namespace Interface {
   export interface UserService {
     get: (request: Entities.User) => Promise<Entities.User>
     getWithPassword: (request: Entities.User) => Promise<Entities.User>
-    list: () => Promise<Entities.User[]>
+    list: (request: Entities.User) => Promise<Entities.User[]>
     create: (request: Entities.User) => Promise<Entities.User>
     createAdmin: (request: Entities.User) => Promise<Entities.User>
     update: (request: Entities.User) => Promise<Entities.User>
@@ -25,7 +25,7 @@ declare namespace Interface {
   export interface UserDatabase {
     get: (request: Entities.User) => Promise<Entities.User>
     getWithPassword: (request: Entities.User) => Promise<Entities.User>
-    list: () => Promise<Entities.User[]>
+    list: (request: Entities.User) => Promise<Entities.User[]>
     create: (request: Entities.User) => Promise<Entities.User>
     update: (request: Entities.User) => Promise<Entities.User>
     delete: (userId: string) => Promise<boolean>
