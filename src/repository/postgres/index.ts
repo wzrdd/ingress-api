@@ -6,12 +6,14 @@ import { Auths } from "../../pkg/auth/entity"
 import { Contacts } from "../../pkg/contact/entity"
 import { Products } from '../../pkg/product/entity'
 import { Roles } from '../../pkg/roles/entity'
+import { Arrivals } from '../../pkg/arrival/entity'
 
 import User from "../../pkg/user/repository"
 import Auth from "../../pkg/auth/repository"
 import Contact from "../../pkg/contact/repository"
 import Product from "../../pkg/product/repository"
 import Role from '../../pkg/roles/repository'
+import Arrival from '../../pkg/arrival/repository'
 
 export default class Postgres implements Interface.Postgres {
   user: Interface.UserDatabase
@@ -19,6 +21,7 @@ export default class Postgres implements Interface.Postgres {
   contact: Interface.ContactDatabase
   product: Interface.ProductDatabase
   role: Interface.Role
+  arrival: Interface.ArrivalDatabase
 
   conn: DataSource
 
@@ -44,7 +47,8 @@ export default class Postgres implements Interface.Postgres {
           Auths,
           Contacts,
           Products,
-          Roles
+          Roles,
+          Arrivals
         ],
         logging: false,
         synchronize: true,
@@ -62,6 +66,7 @@ export default class Postgres implements Interface.Postgres {
       this.contact = new Contact(conn)
       this.product = new Product(conn)
       this.role = new Role(conn)
+      this.arrival = new Arrival(conn)
     } catch (err) {
       throw err
     }

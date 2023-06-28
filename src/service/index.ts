@@ -3,6 +3,7 @@ import Auth from '../pkg/auth/service'
 import Contact from '../pkg/contact/service'
 import Product from '../pkg/product/service'
 import Role from '../pkg/roles/service'
+import Arrival from '../pkg/arrival/service'
 
 export default class Services implements Interface.Services {
   user: User
@@ -10,6 +11,7 @@ export default class Services implements Interface.Services {
   contact: Contact
   product: Product
   role: Role
+  arrival: Arrival
 
   constructor(
     postgres: Interface.Postgres,
@@ -19,5 +21,6 @@ export default class Services implements Interface.Services {
     this.contact = new Contact(postgres)
     this.product = new Product(postgres)
     this.role = new Role(postgres)
+    this.arrival = new Arrival(postgres)
   }
 }

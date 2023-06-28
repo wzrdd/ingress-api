@@ -15,7 +15,6 @@ export default class User implements Interface.UserService {
     return response
   };
 
-  // TODO this should be called list
   list = async () => {
     try {
       return await this.database.user.list()

@@ -6,6 +6,7 @@ import Auth from '../pkg/auth/delivery'
 import Contact from '../pkg/contact/delivery'
 import Product from '../pkg/product/delivery'
 import Role from '../pkg/roles/delivery'
+import Arrival from '../pkg/arrival/delivery'
 
 export default class Server {
   server: FastifyInstance;
@@ -50,6 +51,9 @@ export default class Server {
     })
     this.server.register(new Role(this.services).routes, {
       prefix: "/api/v1/role"
+    })
+    this.server.register(new Arrival(this.services).routes, {
+      prefix: "/api/v1/arrival"
     })
   }
 

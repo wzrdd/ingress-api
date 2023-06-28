@@ -5,6 +5,7 @@ declare namespace Interface {
     contact: Interface.ContactService
     product: Interface.ProductService
     role: Interface.Role
+    arrival: Interface.ArrivalService
   }
 
   export interface Postgres {
@@ -13,5 +14,6 @@ declare namespace Interface {
     contact: Interface.ContactDatabase
     product: Interface.ProductDatabase
     role: Interface.Role
+    arrival: Interface.ArrivalDatabase
   }
 }
